@@ -75,6 +75,7 @@ define(function(require, exports, module) {
 			EditorEditors.on('session.dblClick', this.onDblClick);
 			EditorEditors.on('session.scroll', this.onScroll);
 			EditorSession.on('focus', this.onFocus);
+			EditorSession.on('close', this.onClose);
 			
 			$(document).on("keydown", this.onKeyDown);
 		},
@@ -97,6 +98,7 @@ define(function(require, exports, module) {
 			EditorEditors.off('session.dblClick', this.onDblClick);
 			EditorEditors.off('session.scroll', this.onScroll);
 			EditorSession.off('focus', this.onFocus);
+			EditorSession.off('close', this.onClose);
 			
 			$(document).off("keydown", this.onKeyDown);
 		},
@@ -155,6 +157,13 @@ define(function(require, exports, module) {
 		},
 		onFocus: function(session) {
 			if (Extension.colorTooltip && Extension.colorTooltip.session.id !== session.id) {
+				Extension.hideColorPicker();
+				Extension.hideColorTooltip();
+			}
+		},
+		onClose: function(session) {
+			if (Extension.colorTooltip && Extension.colorTooltip.session.id === session.id) {
+				Extension.hideColorPicker();
 				Extension.hideColorTooltip();
 			}
 		},
@@ -223,7 +232,9 @@ define(function(require, exports, module) {
 		},
 		hideColorTooltip: function() {
 			if (this.colorTooltip) {
-				this.colorTooltip.session.data.removeMarker(this.colorTooltip.marker);
+				if (this.colorTooltip.session.data) {
+					this.colorTooltip.session.data.removeMarker(this.colorTooltip.marker);
+				}
 				this.colorTooltip = null;
 			}
 		},
