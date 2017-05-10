@@ -1,0 +1,217 @@
+.module-editor .editor-container .editor-box .csstools-tooltip {
+  position: absolute;
+  border: 1px solid #d9cb89;
+  background-color: #81741C;
+  border-radius: 2px;
+  opacity: 0.5;
+  margin-top: -1px;
+  z-index: 100;
+}
+.module-editor .editor-container .editor-csstools {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 70;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  display: none;
+}
+.module-editor .editor-container .editor-csstools .arrow {
+  position: absolute;
+  left: -7px;
+  top: 0;
+  margin-top: 2px;
+  border-right-width: 7px;
+  border-right-style: solid;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+}
+.module-editor .editor-container .editor-csstools.lefted .arrow {
+  left: auto;
+  right: -7px;
+  border-right-width: 0;
+  border-left-width: 7px;
+  border-left-style: solid;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker {
+  width: 290px;
+  padding: 10px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .colorpicker::after {
+  display: block;
+  clear: both;
+  content: '';
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .sp-palette-container {
+  display: none;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .picker {
+  float: left;
+  width: 200px;
+  position: relative;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .picker .picker-color {
+  position: relative;
+  float: left;
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .picker .picker-sat {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-image: -webkit-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
+  background-image: linear-gradient(to right, #fff, rgba(204, 154, 129, 0));
+  border-radius: 2px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .picker .picker-val {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-image: -webkit-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
+  background-image: linear-gradient(to top, #000, rgba(204, 154, 129, 0));
+  border-radius: 2px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .picker .picker-hue {
+  position: relative;
+  float: right;
+  width: 40px;
+  height: 150px;
+  background: -webkit-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+  background: linear-gradient(to bottom, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+  border-radius: 2px;
+  cursor: pointer;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .picker .picker-dragger {
+  border-radius: 5px;
+  height: 5px;
+  width: 5px;
+  border: 1px solid #fff;
+  background: #000;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 1px;
+  margin-top: 1px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .picker .picker-slider {
+  position: absolute;
+  top: 0;
+  cursor: pointer;
+  height: 3px;
+  left: -1px;
+  right: -1px;
+  border: 1px solid #000000;
+  background: white;
+  opacity: .8;
+  border-radius: 2px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .picker .alpha-clear {
+  clear: both;
+  height: 10px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .picker .alpha {
+  position: relative;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+  border-radius: 2px;
+  cursor: pointer;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .picker .alpha .alpha-inner {
+  display: block;
+  position: relative;
+  height: 20px;
+  border-radius: 2px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .picker .alpha .alpha-inner .alpha-handle {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  width: 6px;
+  left: 50%;
+  cursor: pointer;
+  border: 1px solid black;
+  background: white;
+  opacity: .8;
+  border-radius: 2px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .inputs {
+  float: right;
+  width: 80px;
+  position: relative;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .inputs .color-compare {
+  height: 22px;
+  box-sizing: border-box;
+  margin-top: 14px;
+  border-radius: 2px;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  border: 1px solid #000000;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .inputs .color-compare div > span {
+  display: block;
+  float: left;
+  width: 50%;
+  height: 29px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .inputs .color-compare div > span > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .inputs .input {
+  font-size: 13px;
+  color: #c2c2c2;
+  line-height: 24px;
+  margin-bottom: 5px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .inputs .input input {
+  float: right;
+  width: 60px;
+  background: transparent;
+  border-bottom: 2px solid #353338;
+  display: block;
+  height: 24px;
+  text-align: center;
+  color: #ffffff;
+  padding: 0 4px;
+  box-sizing: border-box;
+  font-size: 13px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .colorpicker-list {
+  padding: 10px 0 0 0;
+  margin-bottom: -5px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .colorpicker-list:after {
+  clear: both;
+  content: '';
+  display: block;
+  height: 4px;
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .colorpicker-list .color {
+  margin-right: 3px;
+  margin-bottom: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  display: block;
+  float: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  border: 1px solid #000000;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+}
+.module-editor .editor-container .editor-csstools .csstools-colorpicker .colorpicker-list .color span {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 2px;
+}

@@ -1,0 +1,260 @@
+// out: ., compress: false, plugin: css-autoprefixer
+
+.module-editor {
+	.editor-container {
+		.editor-box {
+			.csstools-tooltip {
+				position: absolute;
+				border: 1px solid #d9cb89;
+				background-color: #81741C;
+				border-radius: 2px;
+				opacity: 0.5;
+				margin-top: -1px;
+				z-index: 100;
+			}
+		}
+		
+		.editor-csstools {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 70;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+			border-radius: 2px;
+			display: none;
+			
+			.arrow {
+				position: absolute;
+				left: -7px;
+				top: 0;
+				margin-top: 2px;
+				border-right-width: 7px;
+				border-right-style: solid;
+				border-top: 7px solid transparent;
+				border-bottom: 7px solid transparent;
+			}
+			
+			&.lefted .arrow {
+				left: auto;
+				right: -7px;
+				border-right-width: 0;
+				border-left-width: 7px;
+				border-left-style: solid;
+			}
+			
+			.csstools-colorpicker {
+				width: 290px;
+				padding: 10px;
+				user-select: none;
+				
+				.colorpicker {
+					&::after {
+						display: block;
+						clear: both;
+						content: '';
+					}
+				}
+				
+				.sp-palette-container {
+					display: none;
+				}
+				
+				.picker {
+					float: left;
+					width: 200px;
+					position: relative;
+					
+					.picker-color {
+						position: relative;
+						float: left;
+						width: 150px;
+						height: 150px;
+						cursor: pointer;
+						border-radius: 2px;
+					}
+					
+					.picker-sat {
+						position: relative;
+						width: 100%;
+						height: 100%;
+						background-image: -webkit-gradient(linear, 0 0, 100% 0, from(#FFF), to(rgba(204, 154, 129, 0)));
+						background-image: -webkit-linear-gradient(left, #FFF, rgba(204, 154, 129, 0));
+						background-image: -moz-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
+						background-image: -o-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
+						background-image: -ms-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
+						background-image: linear-gradient(to right, #fff, rgba(204, 154, 129, 0));
+						border-radius: 2px;
+					}
+					.picker-val {
+						position: relative;
+						width: 100%;
+						height: 100%;
+						background-image: -webkit-gradient(linear, 0 100%, 0 0, from(#000000), to(rgba(204, 154, 129, 0)));
+						background-image: -webkit-linear-gradient(bottom, #000000, rgba(204, 154, 129, 0));
+						background-image: -moz-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
+						background-image: -o-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
+						background-image: -ms-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
+						background-image: linear-gradient(to top, #000, rgba(204, 154, 129, 0));
+						border-radius: 2px;
+					}
+					.picker-hue {
+						position: relative;
+						float: right;
+						width: 40px;
+						height: 150px;
+						background: -moz-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+						background: -ms-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+						background: -o-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+						background: -webkit-gradient(linear, left top, left bottom, from(#ff0000), color-stop(0.17, #ffff00), color-stop(0.33, #00ff00), color-stop(0.5, #00ffff), color-stop(0.67, #0000ff), color-stop(0.83, #ff00ff), to(#ff0000));
+						background: -webkit-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+						background: linear-gradient(to bottom, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+						border-radius: 2px;
+						cursor: pointer;
+					}
+					
+					.picker-dragger {
+						border-radius: 5px;
+						height: 5px;
+						width: 5px;
+						border: 1px solid #fff;
+						background: #000;
+						cursor: pointer;
+						position: absolute;
+						top: 0;
+						left: 0;
+						margin-left: 1px;
+						margin-top: 1px;
+					}
+					.picker-slider {
+						position: absolute;
+						top: 0;
+						cursor: pointer;
+						height: 3px;
+						left: -1px;
+						right: -1px;
+						border: 1px solid #000000;
+						background: white;
+						opacity: .8;
+						border-radius: 2px;
+					}
+					
+					.alpha-clear {
+						clear: both;
+						height: 10px;
+					}
+					
+					.alpha {
+						position: relative;
+						background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+						border-radius: 2px;
+						cursor: pointer;
+						
+						.alpha-inner {
+							display: block;
+							position: relative;
+							height: 20px;
+							border-radius: 2px;
+							
+							.alpha-handle {
+								position: absolute;
+								top: -1px;
+								bottom: -1px;
+								width: 6px;
+								left: 50%;
+								cursor: pointer;
+								border: 1px solid black;
+								background: white;
+								opacity: .8;
+								border-radius: 2px;
+							}
+						}
+					}
+				}
+				
+				.inputs {
+					float: right;
+					width: 80px;
+					position: relative;
+					
+					.color-compare {
+						height: 22px;
+						box-sizing: border-box;
+						margin-top: 14px;
+						border-radius: 2px;
+						overflow: hidden;
+						position: absolute;
+						width: 100%;
+						border: 1px solid #000000;
+						
+						div > span {
+							display: block;
+							float: left;
+							width: 50%;
+							height: 29px;
+							
+							& > span {
+								display: block;
+								width: 100%;
+								height: 100%;
+							}
+						}
+					}
+					
+					.input {
+						font-size: 13px;
+						color: #c2c2c2;
+						line-height: 24px;
+						margin-bottom: 5px;
+						
+						input {
+							float: right;
+							width: 60px;
+							background: transparent;
+							border-bottom: 2px solid #353338;
+							display: block;
+							height: 24px;
+							text-align: center;
+							color: #ffffff;
+							padding: 0 4px;
+							box-sizing: border-box;
+							font-size: 13px;
+						}
+					}
+				}
+				
+				.colorpicker-list {
+					padding: 10px 0 0 0;
+					margin-bottom: -5px;
+					
+					&:after {
+						clear: both;
+						content: '';
+						display: block;
+						height: 4px;
+					}
+					
+					.color {
+						margin-right: 3px;
+						margin-bottom: 3px;
+						width: 18px;
+						height: 18px;
+						border-radius: 3px;
+						display: block;
+						float: left;
+						cursor: pointer;
+						box-sizing: border-box;
+						border: 1px solid #000000;
+						background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+						
+						span {
+							width: 100%;
+							height: 100%;
+							display: block;
+							border-radius: 2px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
