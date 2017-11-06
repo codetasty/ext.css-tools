@@ -1,41 +1,62 @@
+/* global define, $ */
+"use strict";
+
 define(function(require, exports, module) {
-	var ExtensionManager = require('core/extensionManager');
+	const ExtensionManager = require('core/extensionManager');
 	
-	var Workspace = require('core/workspace');
-	var Fn = require('core/fn');
+	const Workspace = require('core/workspace');
+	const Fn = require('core/fn');
 	
-	var Editor = require('modules/editor/editor');
+	const Editor = require('modules/editor/editor');
 	
-	var EditorEditors = require('modules/editor/ext/editors');
-	var EditorSession = require('modules/editor/ext/session');
-	var EditorSplit = require('modules/editor/ext/split');
+	const EditorEditors = require('modules/editor/ext/editors');
+	const EditorSession = require('modules/editor/ext/session');
+	const EditorSplit = require('modules/editor/ext/split');
 	
-	var SyntaxDetector = require('libs/syntax_detector');
+	const SyntaxDetector = require('modules/editor/syntaxDetector');
 
-	var Range = require("ace/range").Range;
+	const Range = require("ace/range").Range;
 	
-	var Spectrum = require('./spectrum');
-	var Color = require('./color');
+	const Spectrum = require('./spectrum');
+	const Color = require('./color');
 
-	var Extension = ExtensionManager.register({
-		name: 'css-tools',
-		css: [
-			'extension'
-		]
-	}, {
-		nodes: [],
-		$el: null,
-		colorpicker: null,
-		lastActive: null,
-		colorpickerChange: false,
-		columnChangeTimer: null,
-		colorTooltip: null,
-		colorActive: null,
-		colorTimer: null,
-		settingsChanged: function(data) {
+	class Extension extends ExtensionManager.Extension {
+		constructor() {
+			super({
+				name: 'css-tools',
+				css: [
+					'extension',
+				]
+			});
 			
-		},
-		init: function() {
+			this.nodes = [];
+			this.$el = null;
+			this.colorpicker = null;
+			this.lastActive = null;
+			this.colorpickerChange = false;
+			this.columnChangeTimer = null;
+			this.colorTooltip = null;
+			this.colorActive = null;
+			this.colorTimer = null;
+			
+			this.onBeforeChange = this.onBeforeChange.bind(this);
+			this.onChangeColumn = this.onChangeColumn.bind(this);
+			this.onClick = this.onClick.bind(this);
+			this.onDblClick = this.onDblClick.bind(this);
+			this.onScroll = this.onScroll.bind(this);
+			this.onFocus = this.onFocus.bind(this);
+			this.onClose = this.onClose.bind(this);
+			this.onKeyDown = this.onKeyDown.bind(this);
+		}
+		
+		
+		settingsChanged(data) {
+			
+		}
+		
+		init() {
+			super.init();
+			
 			var self = this;
 			
 			this.$el = $('<div class="editor-csstools background-color-sidebar">\
@@ -78,8 +99,11 @@ define(function(require, exports, module) {
 			EditorSession.on('close', this.onClose);
 			
 			$(document).on("keydown", this.onKeyDown);
-		},
-		destroy: function() {
+		}
+		
+		destroy() {
+			super.destroy();
+			
 			this.hideColorTooltip();
 			this.hideColorPicker();
 			
@@ -101,20 +125,22 @@ define(function(require, exports, module) {
 			EditorSession.off('close', this.onClose);
 			
 			$(document).off("keydown", this.onKeyDown);
-		},
-		onBeforeChange: function(e) {
-			if (!Extension.colorpickerChange && Extension.colorActive) {
-				Extension.hideColorPicker();
+		}
+		
+		onBeforeChange(e) {
+			if (!this.colorpickerChange && this.colorActive) {
+				this.hideColorPicker();
 			}
-		},
-		onChangeColumn: function(session, pos) {
+		}
+		
+		onChangeColumn(session, pos) {
 			// @deprecated
 			// if (Extension.columnChangeTimer) {
 			// 	clearTimeout(Extension.columnChangeTimer);
 			// 	Extension.columnChangeTimer = null;
 			// }
 			
-			if (Extension.colorActive) {
+			if (this.colorActive) {
 				return;
 			}
 			
@@ -123,7 +149,7 @@ define(function(require, exports, module) {
 			if (["css", "svg", "less", "scss", "stylus"].indexOf(session.modeAtCursor) === -1) {
 				//hide color tooltips for modes that can change inline
 				if (session.mode == 'php' || session.mode == 'html') {
-					Extension.hideColorTooltip();
+					this.hideColorTooltip();
 				}
 				
 				return;
@@ -131,58 +157,65 @@ define(function(require, exports, module) {
 			
 			var line = doc.getLine(pos.row);
 			var range = session.editor.selection.getRange();
-			var color = range.isEmpty() ? Extension.detect(pos, line) : null;
+			var color = range.isEmpty() ? this.detect(pos, line) : null;
 			
 			
 			if (color) {
-				Extension.showColorTooltip(session, color);
+				this.showColorTooltip(session, color);
 			} else {
-				Extension.hideColorTooltip();
+				this.hideColorTooltip();
 			}
-		},
-		onClick: function(session, pos) {
-			if (Extension.colorTooltip &&
-				Extension.colorTooltip.session.id === session.id &&
-				Extension.colorTooltip.range.inside(pos.row, pos.column)
+		}
+		
+		onClick(session, pos) {
+			if (this.colorTooltip &&
+				this.colorTooltip.session.id === session.id &&
+				this.colorTooltip.range.inside(pos.row, pos.column)
 			) {
-				if (!Extension.colorActive) {
-					Extension.openColorPicker();
+				if (!this.colorActive) {
+					this.openColorPicker();
 				}
-			} else if (Extension.colorActive) {
-				Extension.hideColorPicker();
+			} else if (this.colorActive) {
+				this.hideColorPicker();
 			}
-		},
-		onDblClick: function(e) {
-			Extension.hideColorTooltip();
-		},
-		onFocus: function(session) {
-			if (Extension.colorTooltip && Extension.colorTooltip.session.id !== session.id) {
-				Extension.hideColorPicker();
-				Extension.hideColorTooltip();
+		}
+		
+		onDblClick(e) {
+			this.hideColorTooltip();
+		}
+		
+		onFocus(session) {
+			if (this.colorTooltip && this.colorTooltip.session.id !== session.id) {
+				this.hideColorPicker();
+				this.hideColorTooltip();
 			}
-		},
-		onClose: function(session) {
-			if (Extension.colorTooltip && Extension.colorTooltip.session.id === session.id) {
-				Extension.hideColorPicker();
-				Extension.hideColorTooltip();
+		}
+		
+		onClose(session) {
+			if (this.colorTooltip && this.colorTooltip.session.id === session.id) {
+				this.hideColorPicker();
+				this.hideColorTooltip();
 			}
-		},
-		onScroll: function(session) {
-			if (Extension.colorActive && Extension.colorActive.session.id === session.id) {
-				Extension.hideColorPicker();
+		}
+		
+		onScroll(session) {
+			if (this.colorActive && this.colorActive.session.id === session.id) {
+				this.hideColorPicker();
 			}
-		},
-		onKeyDown: function(e) {
-			if (!Extension.colorActive) {
+		}
+		
+		onKeyDown(e) {
+			if (!this.colorActive) {
 				return;
 			}
 
 			// when ESC is pressed, undo all changes made by the colorpicker
 			if (e.keyCode === 27) {
-				self.hideColorPicker();
+				this.hideColorPicker();
 			}
-		},
-		detect: function(pos, line) {
+		}
+		
+		detect(pos, line) {
 			var colors = line.match(Color.isColor);
 			if (!colors || !colors.length) {
 				return null;
@@ -209,15 +242,16 @@ define(function(require, exports, module) {
 				}
 			}
 			return null;
-		},
-		showColorTooltip: function(session, color) {
+		}
+		
+		showColorTooltip(session, color) {
 			var id = session.id + ':' + color.range.start.row + ':' + color.range.start.column + ':' + color.color;
 			
 			if (this.colorTooltip) {
 				if (this.colorTooltip.id === id) {
 					return;
 				} else {
-					Extension.hideColorTooltip();
+					this.hideColorTooltip();
 				}
 			}
 			
@@ -229,16 +263,18 @@ define(function(require, exports, module) {
 				id: id,
 				marker: marker
 			};
-		},
-		hideColorTooltip: function() {
+		}
+		
+		hideColorTooltip() {
 			if (this.colorTooltip) {
 				if (this.colorTooltip.session.data) {
 					this.colorTooltip.session.data.removeMarker(this.colorTooltip.marker);
 				}
 				this.colorTooltip = null;
 			}
-		},
-		parseColorString: function(col) {
+		}
+		
+		parseColorString(col) {
 			var ret = {
 				orig: col
 			};
@@ -270,8 +306,9 @@ define(function(require, exports, module) {
 			}
 
 			return ret;
-		},
-		_makeUnique: function(arr){
+		}
+		
+		_makeUnique(arr) {
 			var i, length, newArr = [];
 			for (i = 0, length = arr.length; i < length; i++) {
 				if (newArr.indexOf(arr[i]) == -1)
@@ -283,8 +320,9 @@ define(function(require, exports, module) {
 				arr.push(newArr[i]);
 	
 			return arr;
-		},
-		openColorPicker: function() {
+		}
+		
+		openColorPicker() {
 			if (this.colorActive || !this.colorTooltip) {
 				return;
 			}
@@ -326,8 +364,9 @@ define(function(require, exports, module) {
 			this.updateColorTools(this.colorActive.session.data);
 
 			this.position();
-		},
-		hideColorPicker: function(update) {
+		}
+		
+		hideColorPicker(update) {
 			if (!this.colorActive) {
 				return;
 			}
@@ -336,8 +375,9 @@ define(function(require, exports, module) {
 			this.$el.hide();
 			
 			this.hideColorTooltip();
-		},
-		updateColorTools: function(session) {
+		}
+		
+		updateColorTools(session) {
 			var lines = session.getLines(0, 2000);
 			var m;
 			var colors = [];
@@ -354,8 +394,9 @@ define(function(require, exports, module) {
 				out.push('<li class="color" data-color="', colors[i], '" title="', colors[i], '"><span style="background-color: ', colors[i], '"></span></li>');
 			}
 			this.$el.find('.colorpicker-list').html(out.join(""));
-		},
-		onColorPicked: function(color) {
+		}
+		
+		onColorPicked(color) {
 			var self = this;
 			
 			if (!this.colorActive) {
@@ -389,8 +430,9 @@ define(function(require, exports, module) {
 				
 				this.position();
 			}.bind(this), 200);
-		},
-		position: function(color) {
+		}
+		
+		position(color) {
 			if (!this.colorActive) {
 				return;
 			}
@@ -440,7 +482,7 @@ define(function(require, exports, module) {
 				top: arrowY
 			});
 		}
-	});
+	}
 
-	module.exports = Extension.api();
+	module.exports = new Extension();
 });
